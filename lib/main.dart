@@ -1,8 +1,11 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'components/fade_in_transition_route.dart';
+import 'controllers/sync_controller.dart';
 import 'features/home/home_screen.dart';
+import 'features/welcome/welcome_controller.dart';
 import 'features/welcome/welcome_screen.dart';
 
 Future<void> main() async {
@@ -23,18 +26,28 @@ Future<void> main() async {
 class FlutterStagPattern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Flutter Stag Pattern",
-      debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
-      onGenerateRoute: (RouteSettings settings) {
-        //mapeamento de rotas usando uma transição animada de "FadeIn"
-        switch (settings.name) {
-          case '/':
-            return FadeInTransitionRoute(widget: HomeScreen());
-            break;
-        }
-      },
+    return BlocProvider(
+      blocs: [
+        Bloc((i) => SyncController()),
+        Bloc((i) => WelcomeController()),
+        Bloc((i) => WelcomeController()),
+      ],
+      child: MaterialApp(
+        title: "Flutter Stag Pattern",
+        debugShowCheckedModeBanner: false,
+        home: WelcomeScreen(),
+        onGenerateRoute: (RouteSettings settings) {
+          //mapeamento de rotas usando uma transição animada de "FadeIn"
+          switch (settings.name) {
+            case '/':
+              return FadeInTransitionRoute(widget: WelcomeScreen());
+              break;
+            case '/home':
+              return FadeInTransitionRoute(widget: HomeScreen());
+              break;
+          }
+        },
+      ),
     );
   }
 }
