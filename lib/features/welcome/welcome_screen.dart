@@ -2,18 +2,27 @@ import 'package:app/components/transition_button.dart';
 import 'package:app/controllers/sync_controller.dart';
 import 'package:app/models/sync_model.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  WelcomeScreen({this.analytics});
+  final FirebaseAnalytics analytics;
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _WelcomeScreenState createState() => _WelcomeScreenState(analytics: analytics);
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  _WelcomeScreenState({this.analytics});
+  final FirebaseAnalytics analytics;
   @override
   void initState() {
     super.initState();
+
+    analytics.logEvent(name: 'Teste', parameters: {'função' : 'deu bom!'}).then((_){
+      print('enviado!');
+    });
   }
 
   @override

@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:app/models/sync_model.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SyncController extends BlocBase {
   SyncController() {
     this._increment();
   }
 
-  var _controller = BehaviorSubject<SyncModel>.seeded(SyncModel(total:20));
+  var _controller = BehaviorSubject<SyncModel>.seeded(SyncModel(total: 20));
   Stream<SyncModel> get outCounter => this._controller.stream;
   Sink<SyncModel> get inCounter => this._controller.sink;
 
@@ -20,6 +21,16 @@ class SyncController extends BlocBase {
       else
         this._controller.value.completado = true;
       this.inCounter.add(this._controller.value);
+      Firestore.instance
+          .collection('books')
+          .document()
+          .setData({'title': 'title', 'author': 'author'});
+      Firestore.instance
+          .collection('book')
+          .where("title", isEqualTo: "title")
+          .snapshots()
+          .listen(
+              (data) => data.documents.forEach((doc) => print(doc["title"])));
     });
   }
 

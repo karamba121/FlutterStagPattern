@@ -2,28 +2,32 @@ import 'package:app/components/transition_button.dart';
 import 'package:app/controllers/sync_controller.dart';
 import 'package:app/models/sync_model.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
+  HomeScreen({this.analytics});
+  final FirebaseAnalytics analytics;
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState(analytics: analytics);
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
+class _HomeScreenState extends State<HomeScreen> {
+  _HomeScreenState({this.analytics});
+  final FirebaseAnalytics analytics;
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this);
+    analytics
+        .logEvent(name: 'Teste', parameters: {'função': 'deu bom!'}).then((_) {
+      print('enviado!');
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
   }
 
   @override
