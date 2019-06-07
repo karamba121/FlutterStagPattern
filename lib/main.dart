@@ -6,6 +6,7 @@ import 'package:firebase_analytics/observer.dart';
 
 import 'components/fade_in_transition_route.dart';
 import 'controllers/sync_controller.dart';
+import 'features/home/home_controller.dart';
 import 'features/home/home_screen.dart';
 import 'features/welcome/welcome_screen.dart';
 
@@ -34,6 +35,7 @@ class FlutterStagPattern extends StatelessWidget {
     return BlocProvider(
       blocs: [
         Bloc((i) => SyncController()),
+        Bloc((i) => HomeController()),
       ],
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],

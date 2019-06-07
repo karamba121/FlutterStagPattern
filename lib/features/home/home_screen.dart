@@ -1,10 +1,13 @@
 import 'package:app/components/transition_button.dart';
 import 'package:app/controllers/sync_controller.dart';
+import 'package:app/models/book.dart';
 import 'package:app/models/sync_model.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'home_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({this.analytics});
@@ -21,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     analytics
         .logEvent(name: 'Teste', parameters: {'função': 'deu bom!'}).then((_) {
-      print('enviado!');
+      print('enviado evento de teste para o firebase analytics!');
     });
   }
 
@@ -34,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final SyncController _syncController =
         BlocProvider.getBloc<SyncController>();
+    final HomeController _homeController =
+        BlocProvider.getBloc<HomeController>();
     return Scaffold(
       floatingActionButton: StreamBuilder<SyncModel>(
           stream: _syncController.outCounter,
@@ -56,24 +61,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              TransitionButton(
-                onPressed: null,
-                color: Colors.pink,
-                route: '/',
-                text: 'Welcome',
-                canGoBack: true,
-              ),
-              RaisedButton(
-                onPressed: _syncController.increment,
-                child: Text('Aumentar fila'),
-              ),
-            ],
-          ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            RaisedButton(
+              onPressed: _homeController.insertBook,
+              child: Text('Inserir Livro'),
+            ),
+            RaisedButton(
+              onPressed: _homeController.deleteBook,
+              child: Text('Deletar Livro'),
+            ),
+            RaisedButton(
+              onPressed: _homeController.updateBook,
+              child: Text('Atualizar Livro'),
+            ),
+            RaisedButton(
+              onPressed: _homeController.getBooks,
+              child: Text('Buscar Livros'),
+            ),
+            StreamBuilder<List<Book>>(
+                stream: _homeController.outListOfBooks,
+                builder: (context, snapshot) {
+                  return snapshot.hasData ? Text(snapshot.data[0].title) : Container();
+                })
+          ],
         ),
       ),
     );
