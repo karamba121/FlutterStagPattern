@@ -10,8 +10,8 @@ class SyncController extends BlocBase {
   }
 
   var _controller = BehaviorSubject<SyncModel>.seeded(SyncModel(total: 20));
-  Stream<SyncModel> get outCounter => this._controller.stream;
-  Sink<SyncModel> get inCounter => this._controller.sink;
+  Stream<SyncModel> get outStream => this._controller.stream;
+  Sink<SyncModel> get inSink => this._controller.sink;
 
   void _increment() {
     Timer.periodic(const Duration(seconds: 2), (_) {
@@ -20,19 +20,19 @@ class SyncController extends BlocBase {
       else
         this._controller.value.completado = true;
 
-      this.inCounter.add(this._controller.value);
+      this.inSink.add(this._controller.value);
     });
   }
 
   void increment() {
     this._controller.value.total += 1;
     this._controller.value.completado = false;
-    this.inCounter.add(this._controller.value);
+    this.inSink.add(this._controller.value);
   }
 
   @override
   void dispose() {
-    this._controller.close();
+    this._controller?.close();
     super.dispose();
   }
 }

@@ -35,7 +35,7 @@ class FlutterStagPattern extends StatelessWidget {
     return BlocProvider(
       blocs: [
         Bloc((i) => SyncController()),
-        Bloc((i) => HomeController()),
+        Bloc((i) => HomeController(context: context)),
       ],
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],

@@ -110,7 +110,7 @@ class TransitionButtonState extends State<TransitionButton>
         setState(() {
           this._status = ButtonStatus.Normal;
         });
-        showErrorMessage(error.message);
+        showErrorMessage(error.message, context);
       });
     }
   }

@@ -41,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider.getBloc<HomeController>();
     return Scaffold(
       floatingActionButton: StreamBuilder<SyncModel>(
-          stream: _syncController.outCounter,
+          stream: _syncController.outStream,
           builder: (context, snapshot) {
-            return snapshot.data.completado == false
+            return (snapshot.hasData && snapshot.data.completado == false)
                 ? FloatingActionButton.extended(
                     onPressed: _syncController.increment,
                     label: Text('Sincronizando logins ' +

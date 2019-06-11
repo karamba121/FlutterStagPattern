@@ -36,9 +36,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         BlocProvider.getBloc<SyncController>();
     return Scaffold(
       floatingActionButton: StreamBuilder<SyncModel>(
-          stream: _syncController.outCounter,
+          stream: _syncController.outStream,
           builder: (context, snapshot) {
-            return snapshot.data.completado == false
+            return (snapshot.hasData && snapshot.data.completado == false)
                 ? FloatingActionButton.extended(
                     onPressed: _syncController.increment,
                     label: Text('Sincronizando logins ' +
@@ -61,13 +61,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              TransitionButton(
-                onPressed: null,
-                color: Colors.blue,
-                route: '/home',
-                text: 'Home',
-                canGoBack: true,
-              ),
               TransitionButton(
                 onPressed: null,
                 color: Colors.blue,
