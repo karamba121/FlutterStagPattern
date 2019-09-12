@@ -1,3 +1,4 @@
+import 'package:app/components/fab_button.dart';
 import 'package:app/components/transition_button.dart';
 import 'package:app/controllers/sync_controller.dart';
 import 'package:app/models/sync_model.dart';
@@ -10,7 +11,8 @@ class WelcomeScreen extends StatefulWidget {
   WelcomeScreen({this.analytics});
   final FirebaseAnalytics analytics;
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState(analytics: analytics);
+  _WelcomeScreenState createState() =>
+      _WelcomeScreenState(analytics: analytics);
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
@@ -20,7 +22,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
 
-    analytics.logEvent(name: 'Teste', parameters: {'função' : 'deu bom!'}).then((_){
+    analytics
+        .logEvent(name: 'Teste', parameters: {'função': 'deu bom!'}).then((_) {
       print('enviado!');
     });
   }
@@ -61,12 +64,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              TransitionButton(
-                onPressed: null,
+              FabButton(
+                  color: Colors.blue,
+                  route: '/home',
+                  text: 'Home',
+                  onPressed: null),
+              FabButton(
                 color: Colors.blue,
                 route: '/home',
                 text: 'Home',
-                canGoBack: true,
+                onPressed: null,
               ),
             ],
           ),
